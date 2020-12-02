@@ -1,4 +1,4 @@
-Decode XLS
+Decode XLS to Go struct
 =====
 
 decxls is a module designed to assist in the decoding of xls based spreadsheets into go slice * structs.  Based upon the initial work w/ CSV parsing from https://github.com/gocarina/gocsv wrapping the excel reader from https://github.com/360EntSecGroup-Skylar/excelize.
