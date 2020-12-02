@@ -7,8 +7,7 @@ import (
 	"log"
 	"reflect"
 	"regexp"
-
-	"github.com/360EntSecGroup-Skylar/excelize"
+	excelize "github.com/360EntSecGroup-Skylar/excelize/v2"
 )
 
 //Decoder interface
@@ -35,37 +34,12 @@ var (
 	ErrNoStructTags = errors.New("no xls struct tags found")
 )
 
-// UnmarshalHeader will try and pull out the "sheet" that matches the structure of the interface provided
-func readToExcelizeHeader(r *excelize.Rows) ([]string, error) {
-	// try and match sheet to structure looking at columnName as header
-	//if useColumnHeader {
-	//}
-	//Row 0 may contain header names
-	row, err := r.Columns()
-	if err != nil {
-		return nil, err
-	}
-	if (row == nil) || (!UseColumnHeader) {
-		// Row 1 will typically be the header so skip first
-		r.Next()
-	}
-	row, err = r.Columns()
-	if err != nil {
-		return nil, err
-	}
-	//Get Columns and build a dictionary
-	for _, colCell := range row {
-		fmt.Print(colCell, "\t")
-	}
-	fmt.Printf("found these columns %v\n", row)
-	return nil, nil
-}
 
 func readToExcelizeWithErrorHandler(r *excelize.Rows, errHandler ErrorHandler, out interface{}) error {
 	// reflect on the interface{} provided for the resultant
 	// get its concrete reference and type
 	outValue, outType := getConcreteReflectValueAndType(out) // Get the concrete type (not pointer) (Slice<?> or Array<?>)
-	fmt.Printf("OutType: %s\n", outType.String())
+	//fmt.Printf("OutType: %s\n", outType.String())
 	if err := ensureOutType(outType); err != nil {
 		return err
 	}
@@ -75,12 +49,12 @@ func readToExcelizeWithErrorHandler(r *excelize.Rows, errHandler ErrorHandler, o
 	if err := ensureOutInnerType(outInnerType); err != nil {
 		return err
 	}
-	fmt.Printf("outInnerType %s\n", outInnerType.String())
+	
 	outInnerStructInfo := getStructInfo(outInnerType) // Get the inner struct info to get XLS annotations
 	if len(outInnerStructInfo.Fields) == 0 {
 		return ErrEmptyFile
 	}
-	fmt.Printf("struct xls: tags discovered %v\n", outInnerStructInfo.Fields)
+	//fmt.Printf("struct xls: tags discovered %v\n", outInnerStructInfo.Fields)
 
 	// start reading the input to extract headers
 	if !r.Next() {
@@ -128,15 +102,11 @@ func readToExcelizeWithErrorHandler(r *excelize.Rows, errHandler ErrorHandler, o
 		i++ // can increment row at bottom
 		objectIface := reflect.New(outInnerType).Interface()
 		outInner := createNewOutInner(outInnerIsPointer, outInnerType)
-		//need to make and append an outInnerValue struct to outValue
-		//objectIface := reflect.NAew(outValue.Type()).Interface() // create an interface to a the top level passed struct
-		//inValue := createNewOutInner(outInnerIsPointer, outInnerType) // create
-
-		//outInner := createNewOutInner(isPointer, concreteOutType)
+		
 		for j, xlsColumnContent := range xlsRow {
 			if fieldInfo, ok := xlsHeadersLabels[j]; ok { // Position found accordingly to header name
 				if outValue.CanInterface() { //make sure thatthe value is not Private
-					fmt.Printf("Parsing Row: %d Column %d : %s\n", i, j, fieldInfo.getFirstKey())
+					//fmt.Printf("Parsing Row: %d Column %d : %s\n", i, j, fieldInfo.getFirstKey())
 					fieldTypeUnmarshallerWithKeys, withFieldsOK = objectIface.(TypeUnmarshalXLSWithFields)
 					if withFieldsOK { // if there is an field based interface driven unmarshaller, use it
 						if err := fieldTypeUnmarshallerWithKeys.UnmarshalXLSWithFields(fieldInfo.getFirstKey(), xlsColumnContent); err != nil {

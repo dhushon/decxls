@@ -28,8 +28,6 @@ func (e *ParseError) Unwrap() error { return e.Err }
 
 // These are the errors that can be returned in ParseError.Err.
 var (
-	ErrTrailingComma = errors.New("extra delimiter at end of line") // Deprecated: No longer used.
-	ErrBareQuote     = errors.New("bare \" in non-quoted-field")
 	ErrQuote         = errors.New("extraneous or missing \" in quoted-field")
 	ErrFieldCount    = errors.New("wrong number of fields")
 )

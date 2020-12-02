@@ -1,9 +1,10 @@
-
-
+// Copyright 2020 Dan Hushon. All rights reserved
+// some portions:
 // Copyright 2014 Jonathan Picques. All rights reserved.
 // Use of this source code is governed by a MIT license
 // The license can be found in the LICENSE file.
 
+// author: Dan Hushon
 // The GoXLS package aims to provide easy XLS serialization and deserialization to the golang programming language
 
 // sourced here under MIT license: https://github.com/gocarina/gocsv/blob/master/csv.go
@@ -17,7 +18,7 @@ import (
 	"io"
 	"reflect"
 	"sync"
-	"github.com/360EntSecGroup-Skylar/excelize"
+	excelize "github.com/360EntSecGroup-Skylar/excelize/v2"
 )
 
 // TagSeparator defines seperator string for multiple xls tags in struct fields

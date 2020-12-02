@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"strings"
 	"sync"
-	"fmt"
 )
 
 // --------------------------------------------------------------------------
@@ -40,7 +39,7 @@ func (f fieldInfo) matchesKey(key string) bool {
 var structInfoCache sync.Map
 var structMap = make(map[reflect.Type]*structInfo)
 var structMapMutex sync.RWMutex
-
+// pull tagged fields from struct for matching with header
 func getStructInfo(rType reflect.Type) *structInfo {
 	stInfo, ok := structInfoCache.Load(rType)
 	if ok {
@@ -125,13 +124,10 @@ func getConcreteContainerInnerType(in reflect.Type) (inInnerWasPointer bool, inI
 
 func getConcreteReflectValueAndType(in interface{}) (reflect.Value, reflect.Type) {
 	value := reflect.ValueOf(in)
-	fmt.Printf("Kind: %s\n",value.Kind())
 	// navigate thru pointer
 	if value.Kind() == reflect.Ptr {
 		value = value.Elem()
-		fmt.Printf("follow Pointer.Kind %v %s %s\n",value, value.Kind(), value.String())
 	}
-	fmt.Printf("Input []*struct is %s %s\n", value, value.Type())
 	return value, value.Type()
 }
 

@@ -193,7 +193,7 @@ func setField(field reflect.Value, value string, omitEmpty bool) error {
 		}
 		field = field.Elem()
 	}
-    fmt.Printf("field.Interface().(type) %s and (kind) %s\n",field.Type(),field.Kind())
+    //fmt.Printf("field.Interface().(type) %s and (kind) %s\n",field.Type(),field.Kind())
 	switch field.Interface().(type) {
 	case string:
 		s, err := toString(value)
@@ -295,7 +295,7 @@ func canMarshal(t reflect.Type) bool {
 
 func unmarshall(field reflect.Value, value string) error {
 	dupField := field
-	fmt.Printf("unmarshal.field.Kind: %s, .Type %s value %s\n",field.Kind(), field.Type(), value)
+	//fmt.Printf("unmarshal.field.Kind: %s, .Type %s value %s\n",field.Kind(), field.Type(), value)
 	unMarshallIt := func(finalField reflect.Value) error {
 		if finalField.CanInterface() {
 			fieldIface := finalField.Interface()
