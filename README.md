@@ -9,7 +9,8 @@ This module supports embedded structs and pointers as well as typical "unmarshal
 
 Installation
 =====
-```go get -u github.com/dhushon/decxls```
+```go get -u github.com/dhushon/decxls
+```
 
 shift to directory...
 
@@ -25,4 +26,53 @@ Unmarshalling with GoLang
 =====
 There is an example of Unmarshalling in the [xls_test.go](./xls_test.go) file to show the basics.
 
+```package main
 
+import (
+	"fmt"
+	"github/dhushon/decxls"
+)
+
+type Test1 struct {
+	Header1 string `xls:"Header 1"`
+	Header2 int `xls:"Header 2"`
+	Header3 CustomFloatUnmarshal `xls:"Header 3"`
+}
+
+type CustomFloatUnmarshal struct {
+	Value string
+	Percent float64
+}
+
+func (c *CustomFloatUnmarshal)UnmarshalXLS(value string) error {
+	c.Value = value
+	f , err := toFloat(value)
+	if err != nil {
+		return err
+	}
+	c.Percent = f
+	return nil
+}
+
+const simplefile = "./test/Test1.xlsx"
+const sheet = "Sheet 2"
+
+type test1 []*Test1
+
+func (tests test1) String() string {
+    s := "["
+    for i, test := range tests {
+        if i > 0 {
+            s += ", "
+        }
+        s += fmt.Sprintf("%v", test)
+    }
+    return s + "]"
+}
+
+func main {
+	ts := test1{}
+	err := UnmarshalFile(simplefile,sheet,&ts))
+	fmt.Printf("Filename based, sheet selection %s test: %v\n",sheet,ts)
+}
+```
