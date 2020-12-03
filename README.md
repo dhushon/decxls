@@ -15,8 +15,11 @@ shift to directory...
 
 Basic Spreadsheets
 =====
+in the test directory, there is an Excel spreadsheet used by the go test functions.  The spreadsheet has two sheets and a small number of rows and columns.  By and large, Sheet1 and 2 are the same, but using out of order headers on the second sheet to test tag<->field mapping.
+
 
 Unmarshalling with GoLang
 =====
+There is an example of Unmarshalling in the xls_test.go file to show the basics.
 
 

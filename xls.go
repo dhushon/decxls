@@ -107,6 +107,7 @@ func UnmarshalExcelize(f *excelize.File, sheet string, out interface{}) error {
 	if err != nil {
 		return err
 	}
+	
 	//log.Printf("found \"%s\" sheet in document\n", sn)
 	r,err := f.Rows(sn)
 	if err != nil{

@@ -79,12 +79,12 @@ func readToExcelizeWithErrorHandler(r *excelize.Rows, errHandler ErrorHandler, o
 		}
 	}
 
-	if FailIfUnmatchedStructTags {
+	if FailIfUnmatchedStructTags { //if we tell it to Fail if StructTag doesn't exist and look at the headers, then throw error
 		if err := maybeMissingStructFields(outInnerStructInfo.Fields, headers); err != nil {
 			return err
 		}
 	}
-	if FailIfDoubleHeaderNames {
+	if FailIfDoubleHeaderNames { //if there are duplicate headers and flag is set then throw error
 		if err := maybeDoubleHeaderNames(headers); err != nil {
 			return err
 		}
@@ -237,6 +237,9 @@ func findSheet(f *excelize.File, sheet string, out interface{}) (string, error) 
 	sh := f.GetSheetList()
 	if len(sh) == 0 {
 		return "", errors.New("XLS document may be empty or a non XLS document as there are no sheets")
+	}
+	if (sheet == "") {
+		return sh[0],nil
 	}
 
 	var eSheet string = ""
